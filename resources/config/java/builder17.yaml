@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ci-builder
+spec:
+  containers:
+    - name: jnlp
+      env:
+        - name: GIT_SSL_NO_VERIFY
+          value: "true"
+    - name: base
+      image: harbor.alopezpa.homelab/system/base:v2.0.0-c02
+      imagePullPolicy: IfNotPresent
+      command:
+        - sleep
+      args:
+        - 25m
+      tty: true
+
+    - name: java-maven
+      image: harbor.alopezpa.homelab/system/java-maven:v3.9.5-java17-c01
+      imagePullPolicy: IfNotPresent
+      command:
+        - sleep
+      args:
+        - 25m
+      tty: true
+      resources:
+        requests:
+          memory: 8Gi
+          #TODO se puede meter cpu y ajustarlo en función de la demanda/cluster
+
+    - name: sonar-scanner
+      image: harbor.alopezpa.homelab/system/sonar-scanner:v5.0.1.3006-c01
+      imagePullPolicy: IfNotPresent
+      command:
+        - sleep
+      args:
+        - 25m
+      tty: true
+
+    - name: trivy
+      image: harbor.alopezpa.homelab/system/trivy:v0.47.0-c01
+      imagePullPolicy: IfNotPresent
+      command:
+        - sleep
+      args:
+        - 25m
+      tty: true
+
+    - name: crane
+      image: harbor.alopezpa.homelab/system/crane:v0.17.0-c01
+      imagePullPolicy: IfNotPresent
+      command:
+        - sleep
+      args:
+        - 25m
+      tty: true
+
+    - name: kaniko
+      image: harbor.alopezpa.homelab/system/kaniko-project-executor:v1.18.0-c01
+      imagePullPolicy: IfNotPresent
+      command:
+        - /busybox/cat
+      tty: true

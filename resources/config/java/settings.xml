@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <servers>
+    <server>
+      <id>public-repository</id>
+      <username>${env.NEXUS_CREDS_USR}</username>
+      <password>${env.NEXUS_CREDS_PSW}</password>
+    </server>
+    <server>
+      <id>releases-repository</id>
+      <username>${env.NEXUS_CREDS_USR}</username>
+      <password>${env.NEXUS_CREDS_PSW}</password>
+    </server>
+    <server>
+      <id>snapshots-repository</id>
+      <username>${env.NEXUS_CREDS_USR}</username>
+      <password>${env.NEXUS_CREDS_PSW}</password>
+    </server>
+  </servers>
+  <mirrors>
+    <mirror>
+      <id>public-repository</id>
+      <name>Maven public repository</name>
+      <url>${env.nexusUrl}/repository/maven-public/</url>
+      <mirrorOf>*</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>

@@ -1,0 +1,38 @@
+FROM harbor.alopezpa.homelab/system/graalvm:v21-c01 AS build
+
+USER root
+
+ARG NEXUS_CREDS_USR
+ARG NEXUS_CREDS_PSW
+ARG nexusUrl
+ARG BINARY_PATH
+
+COPY .mvn/settings.xml  /opt/maven/conf/settings.xml
+COPY .mvn/toolchains.xml  /opt/maven/conf/toolchains.xml
+COPY . /code/
+
+WORKDIR /code
+RUN mvn dependency:purge-local-repository clean package \
+    -Dnative \
+    -Dmaven.test.skip=true \
+    -Ddependency-check.skip=true \
+    -Dcheckstyle.skip=true \
+    -Dpmd.skip=true \
+    -Djacoco.skip=true \
+    -Dmaven.repo.local=.m2/repository \
+    --no-transfer-progress \
+    -q
+
+FROM registry.access.redhat.com/ubi9/ubi:9.5-1736404036
+WORKDIR /work/
+USER root
+COPY --from=build /code/target/*-runner /work/application
+RUN chmod 775 /work /work/application \
+  && chown -R 1001 /work \
+  && chmod -R "g+rwX" /work \
+  && chown -R 1001:root /work
+
+EXPOSE 8080
+USER 1001
+
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]

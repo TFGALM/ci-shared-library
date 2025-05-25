@@ -1,0 +1,31 @@
+projectName: "alopezpa"
+urls:
+  sonar: 'https://sonarqube.alopezpa.homelab'
+  trivy: 'https://forgejo.alopezpa.homelab/security/analysis-report.git'
+  forgejo: 'https://forgejo.alopezpa.homelab'
+  harbor: 'https://harbor.alopezpa.homelab'
+services:
+  sonar: 'http://sonarqube-sonarqube.sonarqube.svc:9000'
+  nexus: 'http://nexus-nexus-repository-manager.nexus.svc:8081'
+  harbor: 'harbor-core.harbor.svc'
+
+crane:
+  credentials:
+      id: 'robot-harbor-jenkins'
+sonar:
+  credentials:
+    id: 'secret-token-sonar-jenkins-bot'
+git:
+  credentials:
+    id: 'forgejo-access-token'
+nexus:
+  credentials:
+    id: 'jenkins-nexus'
+harbor:
+  trivyPath: 'harbor-prod.software.bl.platform/devops/'
+  genericDb: 'trivy-db'
+  javaDb: 'trivy-java-db'
+
+repoConfFile: "/config/dev.yml"
+repository: "FORGEJO"
+
